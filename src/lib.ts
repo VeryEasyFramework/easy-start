@@ -23,7 +23,7 @@ async function git(command: string, ...args: string[]): Promise<boolean> {
 async function cloneRepo(): Promise<boolean> {
   return await git(
     "clone",
-    "git@github.com:eveffer/easy-app-template.git",
+    "https://github.com/eveffer/easy-app-template.git",
     "./easy-app",
   );
 }

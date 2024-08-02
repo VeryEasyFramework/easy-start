@@ -1,4 +1,3 @@
-
 import { runCommand } from "@eveffer/easy-command";
 
 type GitCommand = "add" | "commit" | "push" | "pull" | "status";
@@ -21,7 +20,7 @@ async function git(command: string, ...args: string[]): Promise<boolean> {
   return result.success;
 }
 
-async function cloneRepo() {
+async function cloneRepo(): Promise<boolean> {
   return await git(
     "clone",
     "git@github.com:eveffer/easy-app-template.git",
@@ -29,16 +28,21 @@ async function cloneRepo() {
   );
 }
 
-async function deleteGitFolder() {
-  return await runCommand("rm", { args: ["-rf", ".git"], cwd: "./easy-app" });
+async function deleteGitFolder(): Promise<boolean> {
+  const result = await runCommand("rm", {
+    args: ["-rf", ".git"],
+    cwd: "./easy-app",
+  });
+  return result.success;
 }
 
-async function initGit() {
-  return await runCommand("git", { args: ["init"], cwd: "./easy-app" });
+async function initGit(): Promise<boolean> {
+  const result = await runCommand("git", { args: ["init"], cwd: "./easy-app" });
+  return result.success;
 }
 
-async function initClient() {
-  return await runCommand(Deno.execPath(), {
+async function initClient(): Promise<boolean> {
+  const result = await runCommand(Deno.execPath(), {
     args: [
       "cache",
       "--node-modules-dir",
@@ -47,24 +51,35 @@ async function initClient() {
     ],
     cwd: "./easy-app/client",
   });
+  return result.success;
 }
 
-async function initDeno() {
-  return await runCommand(Deno.execPath(), {
+async function initDeno(): Promise<boolean> {
+  const result = await runCommand(Deno.execPath(), {
     args: ["cache", "app.ts"],
     cwd: "./easy-app",
   });
+  return result.success;
 }
-async function runDev() {
-  return await runCommand(Deno.execPath(), {
+async function runDev(): Promise<boolean> {
+  const result = await runCommand(Deno.execPath(), {
     args: ["task", "dev"],
     cwd: "./easy-app",
   });
+  return result.success;
 }
-if (import.meta.main) {
-  await cloneRepo();
-  await deleteGitFolder();
-  await initClient();
-  await initDeno();
+
+async function successWrapper(fn: () => Promise<boolean>, message: string) {
+  if (!await fn()) {
+    console.error(`Failed to ${message}`);
+    Deno.exit(1);
+  }
+}
+
+export async function setUpEasyApp() {
+  await successWrapper(cloneRepo, "clone repository");
+  await successWrapper(deleteGitFolder, "delete .git folder");
+  await successWrapper(initClient, "init client");
+  await successWrapper(initDeno, "init deno");
   await runDev();
 }

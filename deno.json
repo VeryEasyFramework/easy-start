@@ -1,10 +1,13 @@
 {
-  "name": "@eveffer/{module-name}",
+  "name": "@eveffer/easy-start",
   "version": "0.1.0",
   "exports": "./mod.ts",
   "publish": {
     "exclude": [
       ".github"
     ]
+  },
+  "imports": {
+    "@eveffer/easy-command": "jsr:@eveffer/easy-command@^1.0.2"
   }
 }

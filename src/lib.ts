@@ -61,13 +61,6 @@ async function initDeno(): Promise<boolean> {
   });
   return result.success;
 }
-async function runDev(): Promise<boolean> {
-  const result = await runCommand(Deno.execPath(), {
-    args: ["task", "dev"],
-    cwd: "./easy-app",
-  });
-  return result.success;
-}
 
 async function successWrapper(fn: () => Promise<boolean>, message: string) {
   if (!await fn()) {
@@ -81,5 +74,4 @@ export async function setUpEasyApp() {
   await successWrapper(deleteGitFolder, "delete .git folder");
   await successWrapper(initClient, "init client");
   await successWrapper(initDeno, "init deno");
-  await runDev();
 }

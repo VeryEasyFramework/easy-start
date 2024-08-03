@@ -1,5 +1,5 @@
 {
-  "name": "@eveffer/easy-start",
+  "name": "@vef/easy-start",
   "version": "0.1.1",
   "exports": "./mod.ts",
   "publish": {
@@ -7,7 +7,5 @@
       ".github"
     ]
   },
-  "imports": {
-    "@eveffer/easy-command": "jsr:@eveffer/easy-command@^1.0.2"
-  }
+  "imports": { "@vef/easy-command": "jsr:@vef/easy-command@^1.0.2" }
 }

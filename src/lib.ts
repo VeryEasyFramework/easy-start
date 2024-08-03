@@ -1,4 +1,4 @@
-import { runCommand } from "@eveffer/easy-command";
+import { runCommand } from "@vef/easy-command";
 
 type GitCommand = "add" | "commit" | "push" | "pull" | "status";
 
@@ -23,7 +23,7 @@ async function git(command: string, ...args: string[]): Promise<boolean> {
 async function cloneRepo(): Promise<boolean> {
   return await git(
     "clone",
-    "https://github.com/eveffer/easy-app-template.git",
+    "https://github.com/VeryEasyFramework/easy-app-template.git",
     "./easy-app",
   );
 }

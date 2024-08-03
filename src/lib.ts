@@ -1,4 +1,5 @@
 import { runCommand } from "@vef/easy-command";
+import { ColorMe, colorMe } from "@vef/color-me";
 
 type GitCommand = "add" | "commit" | "push" | "pull" | "status";
 
@@ -14,6 +15,7 @@ function git(command: "config", key: string, value: string): Promise<boolean>;
 
 async function git(command: string, ...args: string[]): Promise<boolean> {
   const result = await runCommand("git", {
+    hideOutput: true,
     args: [command, ...args],
   });
 
@@ -30,48 +32,56 @@ async function cloneRepo(): Promise<boolean> {
 
 async function deleteGitFolder(): Promise<boolean> {
   const result = await runCommand("rm", {
+    hideOutput: true,
     args: ["-rf", ".git"],
     cwd: "./easy-app",
   });
   return result.success;
 }
 
-async function initGit(): Promise<boolean> {
-  const result = await runCommand("git", { args: ["init"], cwd: "./easy-app" });
-  return result.success;
-}
-
-async function initClient(): Promise<boolean> {
-  const result = await runCommand(Deno.execPath(), {
-    args: [
-      "cache",
-      "--node-modules-dir",
-      "--allow-scripts=npm:esbuild",
-      "vite.config.mts",
-    ],
-    cwd: "./easy-app/client",
-  });
-  return result.success;
-}
-
 async function initDeno(): Promise<boolean> {
   const result = await runCommand(Deno.execPath(), {
-    args: ["cache", "app.ts"],
+    hideOutput: true,
+    args: ["task", "cache"],
     cwd: "./easy-app",
   });
   return result.success;
 }
 
+async function renameFile(appName: string, path: string): Promise<void> {
+  const matchString = "{appName}";
+  const content = await Deno.readTextFile(path);
+  const newContent = content.replace(matchString, appName);
+  await Deno.writeTextFile(path, newContent);
+}
+
 async function successWrapper(fn: () => Promise<boolean>, message: string) {
+  console.log(colorMe.brightCyan(message));
   if (!await fn()) {
     console.error(`Failed to ${message}`);
     Deno.exit(1);
   }
 }
+async function renameFiles() {
+  const files = [
+    "./easy-app/README.md",
+    "./easy-app/client/index.html",
+    "./easy-app/client/src/App.vue",
+  ];
 
+  for (const file of files) {
+    await renameFile("My Awesome App", file);
+  }
+  return true;
+}
 export async function setUpEasyApp() {
-  await successWrapper(cloneRepo, "clone repository");
-  await successWrapper(deleteGitFolder, "delete .git folder");
-  await successWrapper(initClient, "init client");
-  await successWrapper(initDeno, "init deno");
+  await successWrapper(cloneRepo, "Fetching the easy-app template...");
+  await successWrapper(deleteGitFolder, "Setting up the project...");
+  await successWrapper(renameFiles, "Cleaning up the project...");
+  await successWrapper(initDeno, "Loading dependencies...");
+  console.log(
+    colorMe.brightGreen(
+      "Project setup complete! 🚀 \n Open it in vscode to get started",
+    ),
+  );
 }

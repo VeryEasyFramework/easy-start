@@ -81,7 +81,12 @@ export async function setUpEasyApp() {
   await successWrapper(initDeno, "Loading dependencies...");
   console.log(
     colorMe.brightGreen(
-      "Project setup complete! 🚀 \n Open it in vscode to get started",
+      "Project setup complete! 🚀 Run: \n\n",
+    ),
+  );
+  console.log(
+    colorMe.brightGreen(
+      "code easy-app\n",
     ),
   );
 }

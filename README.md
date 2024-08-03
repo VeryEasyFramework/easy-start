@@ -1,5 +1,5 @@
 # Easy Start for Easy App
 
 ```shell
-deno run --allow-run --allow-read jsr:@vef/easy-start
+deno run --allow-all jsr:@vef/easy-start
 ```

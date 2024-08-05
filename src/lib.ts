@@ -77,6 +77,7 @@ async function renameFiles() {
       console.log('...')
     }
   return true;
+  }
 }
 export async function setUpEasyApp() {
   await successWrapper(cloneRepo, "Fetching the easy-app template...");

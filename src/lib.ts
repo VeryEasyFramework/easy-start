@@ -70,19 +70,20 @@ async function renameFiles() {
   ];
 
   for (const file of files) {
+    try{
+      
     await renameFile("My Awesome App", file);
-  }
+    }catch(e){
+      console.log('...')
+    }
   return true;
 }
 export async function setUpEasyApp() {
   await successWrapper(cloneRepo, "Fetching the easy-app template...");
   await successWrapper(deleteGitFolder, "Setting up the project...");
-  try{
-    
+
   await successWrapper(renameFiles, "Cleaning up the project...");
-  }catch(e){
-    console.log('...')
-  }
+
     await successWrapper(initDeno, "Loading dependencies...");
   console.log(
     colorMe.brightGreen(

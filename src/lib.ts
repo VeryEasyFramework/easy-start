@@ -55,7 +55,7 @@ async function renameFile(appName: string, path: string): Promise<void> {
   await Deno.writeTextFile(path, newContent);
 }
 
-async function successWrapper(fn: () => Promise<boolean>, message: string) {
+async function successWrapper(fn: () => Promise<boolean|undefined>, message: string) {
   console.log(colorMe.brightCyan(message));
   if (!await fn()) {
     console.error(`Failed to ${message}`);

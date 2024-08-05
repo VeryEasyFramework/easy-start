@@ -75,6 +75,7 @@ async function renameFiles() {
     await renameFile("My Awesome App", file);
     }catch(e){
       console.log('...')
+      return true;
     }
   return true;
   }

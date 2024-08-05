@@ -77,8 +77,13 @@ async function renameFiles() {
 export async function setUpEasyApp() {
   await successWrapper(cloneRepo, "Fetching the easy-app template...");
   await successWrapper(deleteGitFolder, "Setting up the project...");
+  try{
+    
   await successWrapper(renameFiles, "Cleaning up the project...");
-  await successWrapper(initDeno, "Loading dependencies...");
+  }catch(e){
+    console.log('...')
+  }
+    await successWrapper(initDeno, "Loading dependencies...");
   console.log(
     colorMe.brightGreen(
       "Project setup complete! 🚀 Run: \n\n",
